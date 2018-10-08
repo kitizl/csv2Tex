@@ -33,5 +33,5 @@ The file (as of this current version) has to be CSV, otherwise everything would 
 You need to install `pandas` for this to work properly.
 
 ## TODO
-- [] Make an automated dependency installing thingamajig
-- [] Include .xls, .ssv, and other data managing filetypes.
+- [ ] Make an automated dependency installing thingamajig
+- [ ] Include .xls, .ssv, and other data managing filetypes.
