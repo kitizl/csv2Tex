@@ -1,5 +1,4 @@
 #!python3
-# LEAVE AT 6:45 PM
 
 import pandas as pd
 import sys
