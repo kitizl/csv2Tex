@@ -1,20 +1,42 @@
 #!python3
+# LEAVE AT 6:45 PM
 
 import pandas as pd
 import sys
 
 def import_file(csv_file):
-	return pd.read_csv(csv_file)
+    # this function imports a .csv file as a pandas dataframe
+    return pd.read_csv(csv_file,dtype=str)
 
-def write_table(pd_file):
-	headers = " & ".join(pd_file.columns) + "\\\\\n"
-	data = ""
-	for i in range(len(pd_file)):
-		data += " & ".join(pd_file.columns) + "\\\\\n \\hline \\\\"
-	return "\\begin\{tabular\}\[" + "\|c\|"*len(pd_file.columns) + "\] \n\n \\hline" + headers + data + "\\\\ \n  \end\{tabular\}"
+def convert_file(pd_file):
+    # this function converts a pandas dataframe to a latex table
+    # adding headers separately
+    headers = pd_file.columns
+    # this is how the tabular object is made in LaTeX
+    begin_str = "\\begin{tabular}{|"+ "c|"*len(pd_file.columns) +"}\n"
+    # and this is how the tabular object is terminated
+    end_str = r"\end{tabular}"
+    # the headers are the first row of the 'body' of the main table
+    main_str = " & ".join(headers) + " \\\\ \n\\hline \\\\ \n"
+    # the following loop will go through the individual rows of the dataframe and
+    # connects the individual elements using '&' (because of LaTeX syntax) and
+    # then moves ahead with a \\\\ (making a LaTeX newline) and \n (a newline for
+    # ease of reading)
+    for line in range(len(pd_file)):
+        main_str += " & ".join(pd_file.iloc[line]) + "\\\\ \n\\hline \\\\ \n"
+    # the final result is returned as a single string
+    return (begin_str + main_str + end_str)
 
 def export_file(string):
-	with fhand as open("table.txt",'w'):
-		fhand.write(string)
+    # this function exports a string into a file
+    choice = input("Would like this to be saved as a file or just as standard output? (F/O): ")
+    if choice=="F":
+        fhand = open("table.txt","w")
+        fhand.write(string)
+    elif choice=="O":
+        print(string)
+    else:
+        print("You have entered an incorrect choice. Please try again.")
+        export_file(string)
 
-export_file(write_table(import_file(sys.argv[1])))
+export_file(convert_file(import_file(sys.argv[1])))
